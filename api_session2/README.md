@@ -1,6 +1,6 @@
 # BÀI 1
 ## Get danh sách rỗng 200 + POST OK 201
-![alt text](result/app1.png)
+![alt text](result/app1_1.png)
 ## Gửi request không có Content-Type 415
 ![alt text](result/app1_2.png)
 ## Thiếu author 422
