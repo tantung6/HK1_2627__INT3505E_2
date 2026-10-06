@@ -28,54 +28,55 @@ Các tài nguyên chính của nền tảng blog đơn giản bao gồm: bài vi
 # Lab 2: Error handler trả về problem + json
 
 ## 1. Kiểm tra truy vấn thành công hay không
-![Đoạn code test](../Week3/result/1.png)
+![Đoạn code test](result/1.png)
 
 Kết quả: Trả về mã status 200 OK, dữ liệu JSON của người dùng {"id": 42, "name": "Alice"}.
-![Kết quả test](../Week3/result/2.png)
+![Kết quả test](result/2.png)
 
 ## 2. Kiểm tra ngoại lệ nghiệp vụ
-![Đoạn code test](../Week3/result/3.png)
+![Đoạn code test](result/3.png)
 
 Kết quả: Trả về mã lỗi 404 NOT FOUND, header Content-Type: application/problem+json, phần body chứa đầy đủ các trường chuẩn theo RFC 7807: type, title, detail, status, instance, trace_id và trường mở rộng resource_id
-![Kết quả test](../Week3/result/4.png)
+![Kết quả test](result/4.png)
 
 ## 3. Kiểm tra fallback lỗi định tuyến HTTP
-![Đoạn code test](../Week3/result/5.png)
+![Đoạn code test](result/5.png)
 
 Kết quả: Werkzeug HTTPException được chuyển đổi tự động thành cấu trúc problem+json với status 404, type là URL trỏ tới http-404
-![Kết quả test](../Week3/result/6.png)
+![Kết quả test](result/6.png)
 
 ## 4. Kiểm tra bắt ngoại lệ chưa xử lý
-![Đoạn code test](../Week3/result/7.png)
+![Đoạn code test](result/7.png)
 
 Kết quả: Trả về mã 500 INTERNAL SERVER ERROR với thông điệp trung tính, ẩn toàn bộ stack trace kỹ thuật của hệ thống phía máy chủ
-![Kết quả test](../Week3/result/8.png)
+![Kết quả test](result/8.png)
 
 # Lab 3: Triển khai /orders có Cursor Pagination
 
 ## 1. Kiểm tra lọc theo trạng thái status=paid
-![Đoạn code test](../Week3/result/9.png)
+![Đoạn code test](result/9.png)
 
 Kết quả: Trả về mã status 200 OK, danh sách chỉ gồm các đơn hàng có trường status mang giá trị paid.
-![Kết quả test](../Week3/result/10.png)
+![Kết quả test](result/10.png)
 
 
 ## 2. Kiểm tra giới hạn số lượng và sinh Cursor limit=5
-![Đoạn code test](../Week3/result/11.png)
+![Đoạn code test](result/11.png)
 
 Kết quả: Trả về mã 200 OK, giới hạn lấy đúng 5 bản ghi đầu tiên kèm chuỗi next_cursor được mã hóa Base64 opaque để truy vấn trang tiếp theo.
-![Kết quả test](../Week3/result/12.png)
+![Kết quả test](result/12.png)
 
 
 ## 3. Kiểm tra trích xuất trường dữ liệu cụ thể fields=id, total
-![Đoạn code test](../Week3/result/13.png)
+![Đoạn code test](result/13.png)
 
 Kết quả: Trả về mã 200 OK, mỗi bản ghi trong mảng data chỉ chứa duy nhất hai thuộc tính id và total, giúp tối ưu lưu lượng truyền tải qua mạng.
-![Kết quả test](../Week3/result/14.png)
+![Kết quả test](result/14.png)
 
 
 ## 4. Kiểm tra xử lý cursor hỏng / không hợp lệ
-![Đoạn code test](../Week3/result/15.png)
+![Đoạn code test](result/15.png)
 
 Kết quả: Bắt lỗi giải mã con trỏ và trả về mã lỗi 400 BAD REQUEST, Content-Type là application/problem+json với thông báo giải thích chi tiết trong trường detail.
-![Kết quả test](../Week3/result/16.png)
+![Kết quả test](result/16.png)
+
