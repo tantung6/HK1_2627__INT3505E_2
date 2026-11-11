@@ -1,0 +1,37 @@
+extends: ["spectral:oas"]
+rules:
+  # Lab 2 Rule 1: operationId is required for operations
+  operation-operationId: error
+
+  # Lab 2 Rule 2: 204 responses must not declare a body/content
+  no-204-body:
+    description: "HTTP 204 response must not have a content field"
+    message: "HTTP 204 (No Content) must not define a content body."
+    severity: error
+    given: "$.paths..responses['204']"
+    then:
+      field: content
+      function: falsy
+
+  # Lab 2 Rule 3: Book.year must be integer (matching Python model/Marshmallow)
+  book-year-type:
+    description: "Book.year must be type integer"
+    message: "Book.year should be integer, not string."
+    severity: error
+    given: "$.components.schemas.Book.properties.year"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - integer
+
+  # Lab 2 Custom Rule: Response 200 must have a non-empty schema
+  response-200-has-schema:
+    description: "HTTP 200 response must have a defined schema"
+    message: "HTTP 200 response content must define a schema."
+    severity: error
+    given: "$.paths..responses['200'].content[*]"
+    then:
+      field: schema
+      function: defined
