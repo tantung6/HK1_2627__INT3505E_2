@@ -213,7 +213,31 @@
                 }
               }
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Error payload contains code VALIDATION_ERROR and message\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.code).to.eql(\"VALIDATION_ERROR\");",
+                  "    pm.expect(json.message).to.be.a(\"string\");",
+                  "});",
+                  "pm.test(\"Error details specifies missing title field\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.errors).to.be.an(\"array\");",
+                  "    const fields = json.errors.map(err => err.field);",
+                  "    pm.expect(fields).to.include(\"title\");",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "GET /books/9999 — not found",
@@ -230,7 +254,25 @@
                 "9999"
               ]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404 Not Found\", () => {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Error payload contains code NOT_FOUND and message Book not found\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.code).to.eql(\"NOT_FOUND\");",
+                  "    pm.expect(json.message).to.eql(\"Book not found\");",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     }
