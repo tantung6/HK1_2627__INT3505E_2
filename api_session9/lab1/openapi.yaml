@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  title: User API - Practice 1 Versioning Demo
+  description: API tài liệu hóa 2 phiên bản v1 (Deprecated có Sunset header) và v2 (Breaking Change + POST).
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000/api
+    description: Local development server
+
+paths:
+  /v1/users/{id}:
+    get:
+      summary: Lấy thông tin user (v1)
+      description: Schema cũ trả về full_name. Đã bị đánh dấu Deprecated và có Sunset header.
+      deprecated: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: Thành công
+          headers:
+            Sunset:
+              schema:
+                type: string
+              example: "Thu, 31 Dec 2026 23:59:59 GMT"
+              description: Thời điểm endpoint sẽ chính thức bị tắt (RFC 8594).
+            Deprecation:
+              schema:
+                type: string
+              example: "true"
+            Link:
+              schema:
+                type: string
+              example: "</api/v2/users/1>; rel=\"successor-version\""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  full_name:
+                    type: string
+                  email:
+                    type: string
+        '404':
+          description: Không tìm thấy user
+
+  /v2/users/{id}:
+    get:
+      summary: Lấy thông tin user (v2)
+      description: Schema mới tách thành first_name và last_name.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  email:
+                    type: string
+        '404':
+          description: Không tìm thấy user
+
+  /v2/users:
+    post:
+      summary: Thêm user mới (v2)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - first_name
+                - last_name
+                - email
+              properties:
+                first_name:
+                  type: string
+                  example: "Huy"
+                last_name:
+                  type: string
+                  example: "Lê"
+                email:
+                  type: string
+                  example: "c@vnu.vn"
+      responses:
+        '201':
+          description: Tạo user thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  email:
+                    type: string
+        '400':
+          description: Thiếu dữ liệu bắt buộc
